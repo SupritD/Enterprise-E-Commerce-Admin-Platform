@@ -5,7 +5,8 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   totalItems: number;
-  itemsPerPage: number;
+  itemsPerPage?: number;
+  pageSize?: number;
   onPageChange: (page: number) => void;
 }
 
@@ -14,12 +15,14 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   totalItems,
   itemsPerPage,
+  pageSize,
   onPageChange,
 }) => {
-  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+  const perPage = itemsPerPage ?? pageSize ?? 10;
+  const startItem = totalItems === 0 ? 0 : (currentPage - 1) * perPage + 1;
+  const endItem = Math.min(currentPage * perPage, totalItems);
 
-  if (totalPages <= 1 && totalItems <= itemsPerPage) {
+  if (totalPages <= 1 && totalItems <= perPage) {
     return (
       <div className="flex items-center justify-between px-4 py-3 border-t border-[#E5E8F0] text-xs text-[#6B7280]">
         <span>

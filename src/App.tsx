@@ -47,15 +47,25 @@ import { OrderDetailPage } from './pages/orders/OrderDetailPage';
 import { DraftOrdersPage } from './pages/orders/DraftOrdersPage';
 import { ManualOrderPage } from './pages/orders/ManualOrderPage';
 import { OrderDocumentsPage } from './pages/orders/OrderDocumentsPage';
+import { InvoicesPage } from './pages/orders/InvoicesPage';
+import { PackingSlipsPage } from './pages/orders/PackingSlipsPage';
+import { ShippingLabelsPage } from './pages/orders/ShippingLabelsPage';
+import { OrderTimelinePage } from './pages/orders/OrderTimelinePage';
 
 // Returns & RMA
 import { ReturnsListPage } from './pages/returns/ReturnsListPage';
 import { ReturnDetailPage } from './pages/returns/ReturnDetailPage';
+import { ReturnApprovalsPage } from './pages/returns/ReturnApprovalsPage';
+import { ReturnInspectionPage } from './pages/returns/ReturnInspectionPage';
+import { ReturnRefundsPage } from './pages/returns/ReturnRefundsPage';
+import { ReturnExchangesPage } from './pages/returns/ReturnExchangesPage';
 
 // Customers
 import { CustomersListPage } from './pages/customers/CustomersListPage';
 import { CustomerDetailPage } from './pages/customers/CustomerDetailPage';
 import { CustomerSegmentsPage } from './pages/customers/CustomerSegmentsPage';
+import { CustomerWalletsPage } from './pages/customers/CustomerWalletsPage';
+import { CustomerWishlistsPage } from './pages/customers/CustomerWishlistsPage';
 import { B2BAccountsPage } from './pages/customers/B2BAccountsPage';
 import { LoyaltyRewardsPage } from './pages/customers/LoyaltyRewardsPage';
 
@@ -63,12 +73,24 @@ import { LoyaltyRewardsPage } from './pages/customers/LoyaltyRewardsPage';
 import { VendorsListPage } from './pages/vendors/VendorsListPage';
 import { VendorDetailPage } from './pages/vendors/VendorDetailPage';
 import { VendorApplicationsPage } from './pages/vendors/VendorApplicationsPage';
+import { VendorProductsPage } from './pages/vendors/VendorProductsPage';
+import { VendorOrdersPage } from './pages/vendors/VendorOrdersPage';
 import { VendorPayoutsPage } from './pages/vendors/VendorPayoutsPage';
+import { VendorCommissionsPage } from './pages/vendors/VendorCommissionsPage';
+
+// Affiliates
 import { AffiliatesPage } from './pages/marketing/AffiliatesPage';
+import { AffiliateReferralsPage } from './pages/marketing/AffiliateReferralsPage';
+import { AffiliateLinksPage } from './pages/marketing/AffiliateLinksPage';
+import { AffiliateCommissionsPage } from './pages/marketing/AffiliateCommissionsPage';
+import { AffiliatePayoutsPage } from './pages/marketing/AffiliatePayoutsPage';
 
 // Marketing
+import { CouponsPage } from './pages/marketing/CouponsPage';
 import { DiscountsPage } from './pages/marketing/DiscountsPage';
+import { FlashSalesPage } from './pages/marketing/FlashSalesPage';
 import { CampaignsPage } from './pages/marketing/CampaignsPage';
+import { UpsellRulesPage } from './pages/marketing/UpsellRulesPage';
 import { AbandonedCartPage } from './pages/marketing/AbandonedCartPage';
 
 // Shipping & Logistics
@@ -176,53 +198,53 @@ export default function App() {
               <Route path="/orders" element={<OrdersListPage />} />
               <Route path="/orders/draft" element={<DraftOrdersPage />} />
               <Route path="/orders/manual/new" element={<ManualOrderPage />} />
-              <Route path="/orders/invoices" element={<OrderDocumentsPage />} />
-              <Route path="/orders/packing-slips" element={<OrderDocumentsPage />} />
-              <Route path="/orders/shipping-labels" element={<OrderDocumentsPage />} />
-              <Route path="/orders/timeline" element={<OrderDocumentsPage />} />
+              <Route path="/orders/invoices" element={<InvoicesPage />} />
+              <Route path="/orders/packing-slips" element={<PackingSlipsPage />} />
+              <Route path="/orders/shipping-labels" element={<ShippingLabelsPage />} />
+              <Route path="/orders/timeline" element={<OrderTimelinePage />} />
               <Route path="/orders/:id" element={<OrderDetailPage />} />
 
               {/* Returns & RMA */}
               <Route path="/returns" element={<ReturnsListPage />} />
-              <Route path="/returns/approvals" element={<ReturnsListPage />} />
-              <Route path="/returns/inspection" element={<ReturnDetailPage />} />
-              <Route path="/returns/refunds" element={<ReturnDetailPage />} />
-              <Route path="/returns/exchanges" element={<ReturnDetailPage />} />
+              <Route path="/returns/approvals" element={<ReturnApprovalsPage />} />
+              <Route path="/returns/inspection" element={<ReturnInspectionPage />} />
+              <Route path="/returns/refunds" element={<ReturnRefundsPage />} />
+              <Route path="/returns/exchanges" element={<ReturnExchangesPage />} />
               <Route path="/returns/:id" element={<ReturnDetailPage />} />
 
               {/* Customers */}
               <Route path="/customers" element={<CustomersListPage />} />
               <Route path="/customers/groups" element={<CustomerSegmentsPage />} />
               <Route path="/customers/segments" element={<CustomerSegmentsPage />} />
-              <Route path="/customers/wallets" element={<CustomersListPage />} />
-              <Route path="/customers/wishlists" element={<CustomersListPage />} />
+              <Route path="/customers/wallets" element={<CustomerWalletsPage />} />
+              <Route path="/customers/wishlists" element={<CustomerWishlistsPage />} />
               <Route path="/customers/:id" element={<CustomerDetailPage />} />
 
               {/* Vendors */}
               <Route path="/vendors" element={<VendorsListPage />} />
               <Route path="/vendors/approval" element={<VendorApplicationsPage />} />
-              <Route path="/vendors/products" element={<VendorsListPage />} />
-              <Route path="/vendors/orders" element={<VendorsListPage />} />
+              <Route path="/vendors/products" element={<VendorProductsPage />} />
+              <Route path="/vendors/orders" element={<VendorOrdersPage />} />
               <Route path="/vendors/payouts" element={<VendorPayoutsPage />} />
-              <Route path="/vendors/commissions" element={<VendorPayoutsPage />} />
+              <Route path="/vendors/commissions" element={<VendorCommissionsPage />} />
               <Route path="/vendors/:id" element={<VendorDetailPage />} />
 
               {/* Affiliates */}
               <Route path="/affiliates" element={<AffiliatesPage />} />
-              <Route path="/affiliates/referrals" element={<AffiliatesPage />} />
-              <Route path="/affiliates/links" element={<AffiliatesPage />} />
-              <Route path="/affiliates/commissions" element={<AffiliatesPage />} />
-              <Route path="/affiliates/payouts" element={<AffiliatesPage />} />
+              <Route path="/affiliates/referrals" element={<AffiliateReferralsPage />} />
+              <Route path="/affiliates/links" element={<AffiliateLinksPage />} />
+              <Route path="/affiliates/commissions" element={<AffiliateCommissionsPage />} />
+              <Route path="/affiliates/payouts" element={<AffiliatePayoutsPage />} />
 
               {/* Marketing */}
-              <Route path="/marketing/coupons" element={<DiscountsPage />} />
+              <Route path="/marketing/coupons" element={<CouponsPage />} />
               <Route path="/marketing/discounts" element={<DiscountsPage />} />
-              <Route path="/marketing/flash-sales" element={<DiscountsPage />} />
+              <Route path="/marketing/flash-sales" element={<FlashSalesPage />} />
               <Route path="/marketing/campaigns" element={<CampaignsPage />} />
               <Route path="/marketing/loyalty" element={<LoyaltyRewardsPage />} />
               <Route path="/marketing/referral" element={<LoyaltyRewardsPage />} />
               <Route path="/marketing/abandoned-cart" element={<AbandonedCartPage />} />
-              <Route path="/marketing/upsell" element={<DiscountsPage />} />
+              <Route path="/marketing/upsell" element={<UpsellRulesPage />} />
 
               {/* Shipping & Logistics */}
               <Route path="/shipping/zones" element={<ShippingZonesPage />} />

@@ -4,13 +4,19 @@ import { X } from 'lucide-react';
 interface BulkActionBarProps {
   selectedCount: number;
   onClearSelection: () => void;
-  children: ReactNode;
+  children?: ReactNode;
+  actions?: Array<{
+    label: string;
+    onClick: () => void;
+    variant?: string;
+  }>;
 }
 
 export const BulkActionBar: React.FC<BulkActionBarProps> = ({
   selectedCount,
   onClearSelection,
   children,
+  actions,
 }) => {
   if (selectedCount === 0) return null;
 
@@ -23,7 +29,22 @@ export const BulkActionBar: React.FC<BulkActionBarProps> = ({
         <span>Selected</span>
       </div>
 
-      <div className="flex items-center gap-2">{children}</div>
+      <div className="flex items-center gap-2">
+        {actions && actions.map((act, i) => (
+          <button
+            key={i}
+            onClick={act.onClick}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+              act.variant === 'danger'
+                ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                : 'bg-white/10 hover:bg-white/20 text-white'
+            }`}
+          >
+            {act.label}
+          </button>
+        ))}
+        {children}
+      </div>
 
       <button
         onClick={onClearSelection}

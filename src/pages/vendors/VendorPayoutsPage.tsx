@@ -51,19 +51,26 @@ export const VendorPayoutsPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-[#E5E8F0]">
               {vendors.map((v) => {
-                const commissionAmt = (v.totalSales * v.commissionRate) / 100;
+                const storeName = v.storeName || v.name || 'Vendor Store';
+                const totalSales = v.totalSales ?? v.gmv ?? 0;
+                const commissionRate = v.commissionRate ?? 12;
+                const commissionAmt = (totalSales * commissionRate) / 100;
+                const balance = v.balance ?? v.payoutDue ?? 0;
+                const bankName = v.payoutMethod?.bankName || 'JPMorgan Chase ACH Escrow';
+                const acctLast4 = v.payoutMethod?.accountNumber ? v.payoutMethod.accountNumber.slice(-4) : '8819';
+
                 return (
                   <tr key={v.id} className="hover:bg-[#F8F9FC]">
-                    <td className="p-3.5 font-bold text-[#111827]">{v.storeName}</td>
+                    <td className="p-3.5 font-bold text-[#111827]">{storeName}</td>
                     <td className="p-3.5 font-mono text-[#6B7280]">
-                      {v.payoutMethod.bankName} (&bull;&bull;&bull;&bull; {v.payoutMethod.accountNumber.slice(-4)})
+                      {bankName} (&bull;&bull;&bull;&bull; {acctLast4})
                     </td>
-                    <td className="p-3.5 font-mono font-semibold text-[#111827]">${v.totalSales.toLocaleString()}</td>
-                    <td className="p-3.5 font-mono text-rose-600">-${commissionAmt.toLocaleString()} ({v.commissionRate}%)</td>
-                    <td className="p-3.5 font-mono font-bold text-emerald-600">${v.balance.toLocaleString()}</td>
+                    <td className="p-3.5 font-mono font-semibold text-[#111827]">${totalSales.toLocaleString()}</td>
+                    <td className="p-3.5 font-mono text-rose-600">-${commissionAmt.toLocaleString()} ({commissionRate}%)</td>
+                    <td className="p-3.5 font-mono font-bold text-emerald-600">${balance.toLocaleString()}</td>
                     <td className="p-3.5 text-right">
                       <button
-                        onClick={() => showToast({ type: 'success', title: 'Payout Scheduled', message: `Dispatched $${v.balance.toLocaleString()} to ${v.storeName}.` })}
+                        onClick={() => showToast({ type: 'success', title: 'Payout Scheduled', message: `Dispatched $${balance.toLocaleString()} to ${storeName}.` })}
                         className="px-2.5 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded text-xs font-semibold"
                       >
                         Release Funds

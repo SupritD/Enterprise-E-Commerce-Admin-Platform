@@ -4,29 +4,36 @@ import { AlertTriangle, X } from 'lucide-react';
 interface ConfirmModalProps {
   isOpen: boolean;
   title: string;
-  description: string;
+  description?: string;
+  message?: string;
   confirmText?: string;
   cancelText?: string;
   requiresPhrase?: string; // e.g. "DELETE"
   variant?: 'danger' | 'warning' | 'primary';
   onConfirm: () => void;
-  onClose: () => void;
+  onClose?: () => void;
+  onCancel?: () => void;
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   title,
   description,
+  message,
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   requiresPhrase,
   variant = 'danger',
   onConfirm,
   onClose,
+  onCancel,
 }) => {
   const [typedPhrase, setTypedPhrase] = useState('');
 
   if (!isOpen) return null;
+
+  const handleClose = onClose || onCancel || (() => {});
+  const modalText = description || message || '';
 
   const isConfirmedDisabled = requiresPhrase
     ? typedPhrase.trim() !== requiresPhrase
@@ -36,7 +43,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
     if (!isConfirmedDisabled) {
       onConfirm();
       setTypedPhrase('');
-      onClose();
+      handleClose();
     }
   };
 
@@ -67,7 +74,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </button>
         </div>
 
-        <p className="mt-3 text-sm text-[#4B5563] leading-relaxed">{description}</p>
+        <p className="mt-3 text-sm text-[#4B5563] leading-relaxed">{modalText}</p>
 
         {requiresPhrase && (
           <div className="mt-4">

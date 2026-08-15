@@ -85,8 +85,9 @@ export const StorefrontPage: React.FC = () => {
     e.preventDefault();
     const found = coupons.find((c) => c.code.toLowerCase() === couponCode.toLowerCase() && c.status === 'active');
     if (found) {
-      setDiscountPercent(found.discountValue);
-      showToast({ type: 'success', title: 'Coupon Applied!', message: `Applied ${found.discountValue}% discount code: ${found.code}` });
+      const discountVal = (found as any).discountValue ?? (found.discountType === 'percentage' ? found.value : 10);
+      setDiscountPercent(discountVal);
+      showToast({ type: 'success', title: 'Coupon Applied!', message: `Applied ${discountVal}% discount code: ${found.code}` });
     } else {
       showToast({ type: 'error', title: 'Invalid Coupon', message: 'Coupon code not found or expired. Try "WELCOME10" or "VIPSUMMER".' });
     }
@@ -102,22 +103,22 @@ export const StorefrontPage: React.FC = () => {
         name: customerName,
         email: customerEmail,
         phone: '+1 (555) 019-2831',
-        totalSpend: total,
-        ordersCount: 1,
-        tier: 'regular',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&q=80',
       },
       shippingAddress: {
+        name: customerName,
         street: shippingAddress,
         city: 'Springfield',
         state: 'OR',
-        zip: '97477',
+        postalCode: '97477',
         country: 'United States',
       },
       billingAddress: {
+        name: customerName,
         street: shippingAddress,
         city: 'Springfield',
         state: 'OR',
-        zip: '97477',
+        postalCode: '97477',
         country: 'United States',
       },
       items: cart.map((i) => ({
@@ -134,13 +135,14 @@ export const StorefrontPage: React.FC = () => {
         fulfillmentStatus: 'unfulfilled',
       })),
       subtotal,
-      discount: discountAmount,
-      shipping: shippingFee,
-      tax: subtotal * 0.0825,
+      discountTotal: discountAmount,
+      shippingTotal: shippingFee,
+      taxTotal: subtotal * 0.0825,
+      grandTotal: total,
       total,
       paymentStatus: 'paid',
       fulfillmentStatus: 'unfulfilled',
-      paymentMethod: 'Credit Card (Stripe Live Simulation)',
+      paymentMethod: 'Credit Card',
     });
 
     setCart([]);

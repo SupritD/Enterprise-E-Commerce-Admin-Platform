@@ -27,10 +27,13 @@ export const ReturnsListPage: React.FC = () => {
   const [page, setPage] = useState(1);
 
   const filtered = returns.filter((r) => {
+    const rmaNumber = r.rmaNumber || '';
+    const orderNumber = r.orderNumber || '';
+    const customerName = r.customer?.name || '';
     const matchesSearch =
-      r.rmaNumber.toLowerCase().includes(search.toLowerCase()) ||
-      r.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
-      r.customer.name.toLowerCase().includes(search.toLowerCase());
+      rmaNumber.toLowerCase().includes(search.toLowerCase()) ||
+      orderNumber.toLowerCase().includes(search.toLowerCase()) ||
+      customerName.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || r.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -165,12 +168,12 @@ export const ReturnsListPage: React.FC = () => {
                   </td>
 
                   <td className="p-4">
-                    <div className="font-bold text-[#111827]">{rma.customer.name}</div>
-                    <div className="text-[11px] text-[#6B7280]">{rma.customer.email}</div>
+                    <div className="font-bold text-[#111827]">{rma.customer?.name || 'Customer'}</div>
+                    <div className="text-[11px] text-[#6B7280]">{rma.customer?.email || 'support@buyer.com'}</div>
                   </td>
 
                   <td className="p-4">
-                    <span className="font-semibold text-[#111827]">{rma.reason}</span>
+                    <span className="font-semibold text-[#111827]">{rma.reason || 'General Return'}</span>
                     {rma.customerNote && (
                       <div className="text-[10px] text-[#6B7280] truncate max-w-xs mt-0.5 italic">
                         "{rma.customerNote}"
@@ -180,12 +183,12 @@ export const ReturnsListPage: React.FC = () => {
 
                   <td className="p-4">
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-800">
-                      {rma.requestedAction.replace('_', ' ')}
+                      {(rma.requestedAction || rma.resolution || 'refund').replace('_', ' ')}
                     </span>
                   </td>
 
                   <td className="p-4 font-mono font-bold text-[#111827]">
-                    ${rma.refundAmount.toFixed(2)}
+                    ${(rma.refundAmount ?? 0).toFixed(2)}
                   </td>
 
                   <td className="p-4">

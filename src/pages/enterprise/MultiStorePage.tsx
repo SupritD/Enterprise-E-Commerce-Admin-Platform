@@ -69,12 +69,12 @@ export const MultiStorePage: React.FC = () => {
               </div>
               <div className="p-3 bg-[#F8F9FC] rounded-lg">
                 <div className="text-[10px] text-[#6B7280]">Revenue (30d)</div>
-                <div className="font-bold text-emerald-600">${st.revenue.toLocaleString()}</div>
+                <div className="font-bold text-emerald-600">${(st.revenue ?? 0).toLocaleString()}</div>
               </div>
             </div>
 
             <div className="flex items-center justify-between text-xs pt-1">
-              <span className="text-[#6B7280]">{st.ordersCount.toLocaleString()} lifetime orders</span>
+              <span className="text-[#6B7280]">{(st.ordersCount ?? 0).toLocaleString()} lifetime orders</span>
               <button
                 onClick={() => showToast({ type: 'info', title: 'Store Settings', message: `Opening localized settings for ${st.name}` })}
                 className="text-[#5B6FF5] font-semibold hover:underline flex items-center gap-1"

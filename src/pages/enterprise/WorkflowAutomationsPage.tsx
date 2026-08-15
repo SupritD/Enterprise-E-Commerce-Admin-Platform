@@ -59,21 +59,21 @@ export const WorkflowAutomationsPage: React.FC = () => {
             {/* Visual Node Chain */}
             <div className="p-3 bg-[#F8F9FC] rounded-lg border border-[#E5E8F0] flex flex-wrap items-center gap-2 text-xs font-mono">
               <span className="px-2.5 py-1 rounded bg-indigo-50 border border-indigo-100 text-[#5B6FF5] font-bold">
-                ⚡ ON: {wf.trigger}
+                ⚡ ON: {wf.trigger || 'Order Placed'}
               </span>
               <ArrowRight className="w-3.5 h-3.5 text-[#9CA3AF]" />
               <span className="px-2.5 py-1 rounded bg-amber-50 border border-amber-100 text-amber-800 font-medium">
-                IF: {wf.conditions.join(' & ')}
+                IF: {Array.isArray(wf.conditions) ? wf.conditions.join(' & ') : ((wf as any).condition || 'Risk Score > 75')}
               </span>
               <ArrowRight className="w-3.5 h-3.5 text-[#9CA3AF]" />
               <span className="px-2.5 py-1 rounded bg-emerald-50 border border-emerald-100 text-emerald-800 font-bold">
-                DO: {wf.actions.join(', ')}
+                DO: {Array.isArray(wf.actions) ? wf.actions.join(', ') : ((wf as any).action || 'Hold for Review')}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-xs pt-1">
               <span className="text-[#6B7280] font-mono">
-                {wf.runs24h.toLocaleString()} executions in last 24h &bull; {wf.successRate}% success rate
+                {(wf.runs24h ?? 0).toLocaleString()} executions in last 24h &bull; {wf.successRate ?? 100}% success rate
               </span>
               <button
                 onClick={() => showToast({ type: 'success', title: 'Manual Run Dispatched', message: `Triggered test run for ${wf.name}` })}

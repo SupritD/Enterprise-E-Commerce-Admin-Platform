@@ -42,53 +42,60 @@ export const B2BQuotesPage: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E5E8F0]">
-            {b2bRFQs.map((rfq) => (
-              <tr key={rfq.id} className="hover:bg-[#F8F9FC] transition-colors">
-                <td className="p-4 font-mono font-bold text-[#5B6FF5]">
-                  {rfq.rfqNumber}
-                  <div className="text-[10px] text-[#6B7280] font-normal mt-0.5">{rfq.createdAt}</div>
-                </td>
-                <td className="p-4">
-                  <div className="font-bold text-[#111827]">{rfq.companyName}</div>
-                  <div className="text-[11px] text-[#6B7280]">Contact: {rfq.contactPerson}</div>
-                </td>
-                <td className="p-4">
-                  <div className="font-semibold text-[#111827]">{rfq.items.length} Product Lines</div>
-                  <div className="text-[11px] text-[#6B7280] font-mono">
-                    Total units: {rfq.items.reduce((sum, item) => sum + item.quantity, 0)}
-                  </div>
-                </td>
-                <td className="p-4 font-mono font-bold text-[#111827]">
-                  ${rfq.targetBudget.toLocaleString()}
-                </td>
-                <td className="p-4 font-mono font-bold text-emerald-600">
-                  {rfq.quotedTotal ? `$${rfq.quotedTotal.toLocaleString()}` : <span className="text-[#9CA3AF]">Pending Review</span>}
-                </td>
-                <td className="p-4">
-                  <StatusBadge status={rfq.status} />
-                </td>
-                <td className="p-4 text-right">
-                  {rfq.status === 'pending_review' ? (
-                    <button
-                      onClick={() => {
-                        updateRFQStatus(rfq.id, 'quote_sent', rfq.targetBudget * 0.95);
-                        showToast({ type: 'success', title: 'Quote Dispatched', message: `Official sales offer sent to ${rfq.companyName}.` });
-                      }}
-                      className="px-3 py-1 bg-[#5B6FF5] hover:bg-[#4557E0] text-white rounded-lg text-xs font-semibold shadow-2xs"
-                    >
-                      Issue Quote
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => showToast({ type: 'info', title: 'View Quote', message: `Opening PDF quote contract for ${rfq.rfqNumber}` })}
-                      className="px-3 py-1 bg-white hover:bg-[#F8F9FC] border border-[#E5E8F0] rounded-lg text-xs font-semibold text-[#111827] shadow-2xs"
-                    >
-                      View PDF
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
+            {b2bRFQs.map((rfq) => {
+              const targetBudget = rfq.targetBudget ?? rfq.quotedTotal ?? 15000;
+              const contactName = rfq.contactName || rfq.contactPerson || 'Purchasing Manager';
+              const itemsList = rfq.items || [];
+              const totalUnits = itemsList.reduce((sum, item: any) => sum + (item.requestedQty || item.quantity || 1), 0);
+
+              return (
+                <tr key={rfq.id} className="hover:bg-[#F8F9FC] transition-colors">
+                  <td className="p-4 font-mono font-bold text-[#5B6FF5]">
+                    {rfq.rfqNumber}
+                    <div className="text-[10px] text-[#6B7280] font-normal mt-0.5">{rfq.createdAt}</div>
+                  </td>
+                  <td className="p-4">
+                    <div className="font-bold text-[#111827]">{rfq.companyName}</div>
+                    <div className="text-[11px] text-[#6B7280]">Contact: {contactName}</div>
+                  </td>
+                  <td className="p-4">
+                    <div className="font-semibold text-[#111827]">{itemsList.length} Product Lines</div>
+                    <div className="text-[11px] text-[#6B7280] font-mono">
+                      Total units: {totalUnits}
+                    </div>
+                  </td>
+                  <td className="p-4 font-mono font-bold text-[#111827]">
+                    ${targetBudget.toLocaleString()}
+                  </td>
+                  <td className="p-4 font-mono font-bold text-emerald-600">
+                    {rfq.quotedTotal ? `$${rfq.quotedTotal.toLocaleString()}` : <span className="text-[#9CA3AF]">Pending Review</span>}
+                  </td>
+                  <td className="p-4">
+                    <StatusBadge status={rfq.status} />
+                  </td>
+                  <td className="p-4 text-right">
+                    {rfq.status === 'pending_review' ? (
+                      <button
+                        onClick={() => {
+                          updateRFQStatus(rfq.id, 'quote_sent', targetBudget * 0.95);
+                          showToast({ type: 'success', title: 'Quote Dispatched', message: `Official sales offer sent to ${rfq.companyName}.` });
+                        }}
+                        className="px-3 py-1 bg-[#5B6FF5] hover:bg-[#4557E0] text-white rounded-lg text-xs font-semibold shadow-2xs"
+                      >
+                        Issue Quote
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => showToast({ type: 'info', title: 'View Quote', message: `Opening PDF quote contract for ${rfq.rfqNumber}` })}
+                        className="px-3 py-1 bg-white hover:bg-[#F8F9FC] border border-[#E5E8F0] rounded-lg text-xs font-semibold text-[#111827] shadow-2xs"
+                      >
+                        View PDF
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

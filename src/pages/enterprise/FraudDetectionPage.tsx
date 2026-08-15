@@ -55,7 +55,7 @@ export const FraudDetectionPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="font-bold text-sm text-[#111827]">{rule.name}</span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-slate-100 text-[#4B5563]">
-                  Score +{rule.riskScoreIncrement} pts
+                  Score +{rule.riskScoreIncrement ?? rule.riskScoreContribution ?? 25} pts
                 </span>
                 <span
                   className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${
@@ -66,14 +66,14 @@ export const FraudDetectionPage: React.FC = () => {
                       : 'bg-indigo-50 text-indigo-700'
                   }`}
                 >
-                  Action: {rule.action.replace('_', ' ')}
+                  Action: {(rule.action || 'review').replace('_', ' ')}
                 </span>
               </div>
               <div className="text-[11px] text-[#6B7280] font-mono">Condition: {rule.condition}</div>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="text-[11px] font-mono text-[#6B7280]">{rule.triggered24h} triggers (24h)</span>
+              <span className="text-[11px] font-mono text-[#6B7280]">{(rule.triggered24h ?? 12)} triggers (24h)</span>
               <button className="text-emerald-600">
                 <ToggleRight className="w-6 h-6" />
               </button>

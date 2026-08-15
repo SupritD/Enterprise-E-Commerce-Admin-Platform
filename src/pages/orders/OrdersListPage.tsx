@@ -58,7 +58,7 @@ export const OrdersListPage: React.FC = () => {
   };
 
   const handleBulkFulfill = () => {
-    selectedIds.forEach((id) => updateOrderStatus(id, 'fulfilled'));
+    selectedIds.forEach((id) => updateOrderStatus(id, undefined, 'fulfilled'));
     showToast({
       type: 'success',
       title: 'Orders Marked Fulfilled',

@@ -98,14 +98,14 @@ export const CustomerDetailPage: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-xl border border-[#E5E8F0] shadow-card space-y-1">
           <div className="text-[11px] font-bold text-[#6B7280] uppercase">Lifetime Value (LTV)</div>
-          <div className="text-xl font-black text-emerald-600 font-mono">${customer.totalSpent.toLocaleString()}</div>
+          <div className="text-xl font-black text-emerald-600 font-mono">${(customer.totalSpend ?? customer.totalSpent ?? 0).toLocaleString()}</div>
           <div className="text-[10px] text-[#9CA3AF]">Top 2% of customer base</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-[#E5E8F0] shadow-card space-y-1">
           <div className="text-[11px] font-bold text-[#6B7280] uppercase">Completed Orders</div>
-          <div className="text-xl font-black text-[#111827] font-mono">{customer.ordersCount} orders</div>
-          <div className="text-[10px] text-[#9CA3AF]">AOV: ${customer.averageOrderValue.toFixed(2)}</div>
+          <div className="text-xl font-black text-[#111827] font-mono">{customer.totalOrders ?? customer.ordersCount ?? 0} orders</div>
+          <div className="text-[10px] text-[#9CA3AF]">AOV: ${(customer.avgOrderValue ?? customer.averageOrderValue ?? 0).toFixed(2)}</div>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-[#E5E8F0] shadow-card space-y-1">

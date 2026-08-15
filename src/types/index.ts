@@ -46,7 +46,8 @@ export interface Product {
   name: string;
   slug: string;
   sku: string;
-  type: 'simple' | 'variable' | 'digital' | 'subscription' | 'bundle' | 'gift_card';
+  barcode?: string;
+  type: 'simple' | 'variable' | 'digital' | 'subscription' | 'bundle' | 'gift_card' | string;
   category: string;
   brand: string;
   vendor: string;
@@ -54,9 +55,10 @@ export interface Product {
   price: number;
   salePrice?: number;
   costPerItem: number;
+  costPrice?: number;
   stock: number;
   lowStockThreshold: number;
-  status: 'active' | 'draft' | 'scheduled' | 'out_of_stock' | 'pending_approval' | 'archived';
+  status: 'active' | 'draft' | 'scheduled' | 'out_of_stock' | 'pending_approval' | 'archived' | string;
   rating: number;
   reviewsCount: number;
   unitsSold: number;
@@ -68,6 +70,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   variants?: ProductVariant[];
+  variantsCount?: number;
   weight: number;
   dimensions: { length: number; width: number; height: number };
   seo: { metaTitle: string; metaDescription: string; canonicalUrl: string; ogImage?: string };
@@ -82,15 +85,18 @@ export interface OrderItem {
   productId: string;
   variantId?: string;
   name: string;
+  productName?: string;
   sku: string;
   thumbnail: string;
   price: number;
+  unitPrice?: number;
   quantity: number;
   discount: number;
   tax: number;
   total: number;
   vendor?: string;
-  fulfillmentStatus: 'unfulfilled' | 'fulfilled' | 'partially_fulfilled' | 'in_transit' | 'delivered' | 'returned' | 'cancelled';
+  variantTitle?: string;
+  fulfillmentStatus: 'unfulfilled' | 'fulfilled' | 'partially_fulfilled' | 'in_transit' | 'delivered' | 'returned' | 'cancelled' | string;
 }
 
 export interface Order {
@@ -104,24 +110,27 @@ export interface Order {
     phone: string;
     avatar: string;
   };
-  channel: 'online_store' | 'mobile_app' | 'pos' | 'b2b_portal' | 'amazon' | 'marketplace';
+  channel: 'online_store' | 'mobile_app' | 'pos' | 'b2b_portal' | 'amazon' | 'marketplace' | string;
   itemsCount: number;
   items: OrderItem[];
   subtotal: number;
   discountTotal: number;
+  discount?: number;
   shippingTotal: number;
   taxTotal: number;
   grandTotal: number;
+  total?: number;
   currency: string;
-  paymentStatus: 'paid' | 'pending' | 'partially_paid' | 'refunded' | 'failed' | 'authorized';
-  fulfillmentStatus: 'unfulfilled' | 'partially_fulfilled' | 'fulfilled' | 'in_transit' | 'delivered' | 'cancelled';
-  paymentMethod: 'Credit Card' | 'PayPal' | 'Stripe' | 'Razorpay' | 'COD' | 'Bank Transfer' | 'Wallet';
+  paymentStatus: 'paid' | 'pending' | 'partially_paid' | 'refunded' | 'failed' | 'authorized' | string;
+  fulfillmentStatus: 'unfulfilled' | 'partially_fulfilled' | 'fulfilled' | 'in_transit' | 'delivered' | 'cancelled' | string;
+  paymentMethod: 'Credit Card' | 'PayPal' | 'Stripe' | 'Razorpay' | 'COD' | 'Bank Transfer' | 'Wallet' | string;
   shippingAddress: {
     name: string;
     street: string;
     city: string;
     state: string;
-    postalCode: string;
+    postalCode?: string;
+    zip?: string;
     country: string;
   };
   billingAddress: {
@@ -129,17 +138,15 @@ export interface Order {
     street: string;
     city: string;
     state: string;
-    postalCode: string;
+    postalCode?: string;
+    zip?: string;
     country: string;
   };
-  shippingMethod: {
-    carrier: string;
-    service: string;
-    trackingNumber?: string;
-    trackingUrl?: string;
-  };
+  shippingMethod: any;
+  trackingNumber?: string;
+  warehouse?: string;
   riskScore: number; // 0 - 100
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: 'low' | 'medium' | 'high' | string;
   tags: string[];
   assignedTo?: string;
   notes: Array<{ id: string; author: string; text: string; date: string }>;
@@ -162,9 +169,20 @@ export interface ReturnRequest {
     qcGrade?: 'Grade A (Like New)' | 'Grade B (Minor Wear)' | 'Grade C (Damaged)' | 'Defective';
     qcResult?: 'Restock' | 'Liquidate' | 'Scrap' | 'Return to Vendor';
   }>;
+  items?: Array<{
+    productId?: string;
+    name?: string;
+    thumbnail?: string;
+    sku?: string;
+    quantity?: number;
+    reason?: string;
+    price?: number;
+  }>;
   reason: string;
+  requestedAction?: string;
+  customerNote?: string;
   resolution: 'refund_original' | 'store_credit' | 'replacement' | 'exchange';
-  status: 'new' | 'awaiting_approval' | 'approved' | 'pickup_scheduled' | 'in_transit' | 'at_qc' | 'resolved' | 'cancelled';
+  status: 'new' | 'awaiting_approval' | 'approved' | 'pickup_scheduled' | 'in_transit' | 'at_qc' | 'resolved' | 'cancelled' | string;
   slaDeadline: string;
   refundAmount: number;
   createdAt: string;
@@ -174,22 +192,46 @@ export interface ReturnRequest {
 export interface Customer {
   id: string;
   name: string;
+  company?: string;
   email: string;
   phone: string;
   avatar: string;
-  group: 'Standard' | 'VIP Platinum' | 'Wholesale Tier 1' | 'B2B Enterprise' | 'Employee';
+  group: 'Standard' | 'VIP Platinum' | 'Wholesale Tier 1' | 'B2B Enterprise' | 'Employee' | string;
   totalOrders: number;
+  ordersCount?: number;
   totalSpend: number;
+  totalSpent?: number;
   avgOrderValue: number;
+  averageOrderValue?: number;
+  creditLimit?: number;
+  paymentTerms?: string;
   lastOrderDate: string;
   createdAt: string;
-  status: 'active' | 'flagged' | 'blocked' | 'guest';
+  status: 'active' | 'flagged' | 'blocked' | 'guest' | string;
   walletBalance: number;
   rewardPoints: number;
-  tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
-  churnRisk: 'low' | 'medium' | 'high';
+  tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum' | string;
+  churnRisk: 'low' | 'medium' | 'high' | string;
   preferredChannel: string;
   tags: string[];
+  shippingAddress?: {
+    name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    postalCode?: string;
+    country?: string;
+  };
+  billingAddress?: {
+    name?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    postalCode?: string;
+    country?: string;
+  };
   addresses: Array<{
     id: string;
     isDefaultShipping: boolean;
@@ -205,9 +247,12 @@ export interface Customer {
 export interface Vendor {
   id: string;
   name: string;
+  storeName?: string;
   storeSlug: string;
+  legalEntity?: string;
   logo: string;
   owner: string;
+  contactName?: string;
   email: string;
   phone: string;
   category: string;
@@ -216,7 +261,18 @@ export interface Vendor {
   reviewsCount: number;
   commissionPlan: string;
   commissionRate: number; // percentage
-  status: 'active' | 'pending_approval' | 'suspended' | 'rejected';
+  status: 'active' | 'pending_approval' | 'suspended' | 'rejected' | string;
+  kycStatus?: string;
+  balance?: number;
+  totalSales?: number;
+  pendingPayout?: number;
+  payoutMethod?: {
+    type?: string;
+    bankName?: string;
+    routingNumber?: string;
+    accountNumber?: string;
+    email?: string;
+  };
   gmv: number;
   commissionEarned: number;
   payoutDue: number;
@@ -245,15 +301,18 @@ export interface StockTransfer {
   transferNumber: string;
   sourceWarehouseId: string;
   sourceWarehouseName: string;
+  sourceWarehouse?: string;
   destWarehouseId: string;
   destWarehouseName: string;
+  destinationWarehouse?: string;
   itemsCount: number;
   totalUnits: number;
   items: Array<{ sku: string; name: string; quantity: number; receivedQty?: number }>;
-  status: 'draft' | 'pending_approval' | 'in_transit' | 'completed' | 'cancelled';
+  status: 'draft' | 'pending_approval' | 'in_transit' | 'completed' | 'cancelled' | string;
   createdBy: string;
   createdAt: string;
   eta: string;
+  expectedArrival?: string;
   notes?: string;
 }
 
@@ -264,9 +323,10 @@ export interface PurchaseOrder {
   supplierName: string;
   warehouseId: string;
   warehouseName: string;
+  warehouse?: string;
   totalAmount: number;
   itemsCount: number;
-  status: 'draft' | 'sent' | 'partially_received' | 'received' | 'cancelled';
+  status: 'draft' | 'sent' | 'partially_received' | 'received' | 'cancelled' | string;
   expectedDate: string;
   createdAt: string;
 }
@@ -275,18 +335,19 @@ export interface Coupon {
   id: string;
   code: string;
   name: string;
-  discountType: 'percentage' | 'fixed_amount' | 'free_shipping' | 'buy_x_get_y';
+  discountType: 'percentage' | 'fixed_amount' | 'free_shipping' | 'buy_x_get_y' | string;
   value: number;
+  discountValue?: number;
   minSpend: number;
   maxDiscount?: number;
   usageCount: number;
   usageLimit: number;
   perCustomerLimit: number;
-  status: 'active' | 'scheduled' | 'expired' | 'disabled';
+  status: 'active' | 'scheduled' | 'expired' | 'disabled' | string;
   validFrom: string;
   validTo: string;
-  appliesTo: 'all_products' | 'specific_categories' | 'specific_products' | 'minimum_order';
-  customerEligibility: 'all' | 'specific_groups' | 'first_time_only';
+  appliesTo: 'all_products' | 'specific_categories' | 'specific_products' | 'minimum_order' | string;
+  customerEligibility: 'all' | 'specific_groups' | 'first_time_only' | string;
 }
 
 export interface FlashSale {
@@ -314,7 +375,7 @@ export interface MarketingCampaign {
   name: string;
   channels: Array<'email' | 'sms' | 'whatsapp' | 'push'>;
   segment: string;
-  status: 'draft' | 'scheduled' | 'sending' | 'sent' | 'active_automated';
+  status: 'draft' | 'scheduled' | 'sending' | 'sent' | 'active_automated' | string;
   scheduledDate: string;
   sentCount: number;
   openRate: number;
@@ -327,19 +388,21 @@ export interface SupportTicket {
   ticketNumber: string;
   customer: { id: string; name: string; email: string; avatar: string };
   subject: string;
-  category: 'order_inquiry' | 'shipping_delay' | 'return_refund' | 'product_question' | 'billing' | 'technical';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  status: 'open' | 'pending_customer' | 'pending_reply' | 'overdue' | 'resolved' | 'closed';
+  category: 'order_inquiry' | 'shipping_delay' | 'return_refund' | 'product_question' | 'billing' | 'technical' | string;
+  priority: 'low' | 'medium' | 'high' | 'urgent' | string;
+  status: 'open' | 'pending_customer' | 'pending_reply' | 'overdue' | 'resolved' | 'closed' | string;
   assignedTo: string;
   slaDeadline: string;
   isOverdue: boolean;
+  channel?: string;
   createdAt: string;
   lastUpdated: string;
   orderNumber?: string;
   messages: Array<{
     id: string;
     sender: string;
-    senderRole: 'customer' | 'agent' | 'system';
+    senderName?: string;
+    senderRole: 'customer' | 'agent' | 'system' | string;
     avatar: string;
     timestamp: string;
     message: string;
@@ -386,19 +449,23 @@ export interface WorkflowAutomation {
   stepsCount: number;
   runs24h: number;
   successRate: number;
-  status: 'active' | 'paused' | 'draft';
+  status: 'active' | 'paused' | 'draft' | string;
   description: string;
   lastRun: string;
+  conditions?: any[];
+  actions?: any[];
 }
 
 export interface FraudRule {
   id: string;
   name: string;
-  entityType: 'order' | 'customer' | 'ip' | 'card';
-  riskScoreContribution: number;
-  action: 'flag_for_review' | 'auto_cancel' | 'require_3ds' | 'log_only';
-  status: 'active' | 'test_mode' | 'inactive';
-  condition: string;
+  entityType: 'order' | 'customer' | 'ip' | 'card' | string;
+  riskScoreContribution?: number;
+  riskScoreIncrement?: number;
+  action: 'flag_for_review' | 'auto_cancel' | 'require_3ds' | 'log_only' | 'auto_block' | string;
+  status: 'active' | 'test_mode' | 'inactive' | string;
+  condition?: string;
+  triggered24h?: number;
 }
 
 export interface NotificationItem {

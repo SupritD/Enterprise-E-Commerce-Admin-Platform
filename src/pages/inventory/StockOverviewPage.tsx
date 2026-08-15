@@ -64,19 +64,23 @@ export const StockOverviewPage: React.FC = () => {
 
       {/* Warehouse Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {warehouses.map((wh) => (
-          <div key={wh.id} className="bg-white rounded-xl border border-[#E5E8F0] p-4 shadow-card space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#111827]">{wh.name}</span>
-              <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 font-bold">{wh.code}</span>
+        {(warehouses || []).map((wh) => {
+          const location = wh.city || (typeof wh.address === 'string' ? wh.address : `${(wh.address as any)?.city || ''}, ${(wh.address as any)?.state || ''}`) || 'Secaucus, NJ';
+          const cap = (wh as any).utilizationPercent ?? wh.capacityUsedPercentage ?? 75;
+          return (
+            <div key={wh.id} className="bg-white rounded-xl border border-[#E5E8F0] p-4 shadow-card space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-[#111827]">{wh.name}</span>
+                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 font-bold">{wh.code}</span>
+              </div>
+              <div className="text-[11px] text-[#6B7280]">{location}</div>
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-[#E5E8F0] font-mono">
+                <span>Rack Capacity:</span>
+                <span className="font-bold text-[#5B6FF5]">{cap}%</span>
+              </div>
             </div>
-            <div className="text-[11px] text-[#6B7280]">{wh.address.city}, {wh.address.state}</div>
-            <div className="flex items-center justify-between text-xs pt-1 border-t border-[#E5E8F0] font-mono">
-              <span>Rack Capacity:</span>
-              <span className="font-bold text-[#5B6FF5]">{wh.utilizationPercent}%</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Search and Filters */}

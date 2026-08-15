@@ -35,7 +35,7 @@ export const ReturnDetailPage: React.FC = () => {
     showToast({
       type: 'success',
       title: 'RMA Authorized',
-      message: `Prepaid return shipping label generated and emailed to ${rma.customer.email}.`,
+      message: `Prepaid return shipping label generated and emailed to ${rma.customer?.email || 'customer'}.`,
     });
   };
 
@@ -53,7 +53,7 @@ export const ReturnDetailPage: React.FC = () => {
     showToast({
       type: 'success',
       title: 'Refund Dispatched',
-      message: `Processed $${rma.refundAmount.toFixed(2)} refund back to customer original payment method.`,
+      message: `Processed $${(rma.refundAmount ?? 0).toFixed(2)} refund back to customer original payment method.`,
     });
   };
 
@@ -124,7 +124,7 @@ export const ReturnDetailPage: React.FC = () => {
               className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm flex items-center gap-1.5"
             >
               <DollarSign className="w-3.5 h-3.5" />
-              <span>Approve QC & Settle Refund (${rma.refundAmount.toFixed(2)})</span>
+              <span>Approve QC & Settle Refund (${(rma.refundAmount ?? 0).toFixed(2)})</span>
             </button>
           )}
         </div>
@@ -138,7 +138,7 @@ export const ReturnDetailPage: React.FC = () => {
             <h3 className="text-sm font-bold text-[#111827]">Returned Item Details</h3>
 
             <div className="divide-y divide-[#E5E8F0]">
-              {rma.items.map((item, idx) => (
+              {(rma.items || rma.products || []).map((item: any, idx: number) => (
                 <div key={idx} className="py-3.5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-lg bg-[#F8F9FC] border border-[#E5E8F0] flex items-center justify-center">
@@ -148,17 +148,17 @@ export const ReturnDetailPage: React.FC = () => {
                       <div className="font-bold text-xs text-[#111827]">{item.name}</div>
                       <div className="text-[11px] font-mono text-[#6B7280]">SKU: {item.sku} &bull; Qty: {item.quantity}</div>
                       <div className="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded inline-block mt-1">
-                        Reason: {rma.reason}
+                        Reason: {item.reason || rma.reason}
                       </div>
                     </div>
                   </div>
 
                   <div className="text-right">
                     <div className="font-mono font-bold text-xs text-[#111827]">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${((item.price || 99.99) * item.quantity).toFixed(2)}
                     </div>
                     <div className="text-[10px] text-[#6B7280]">
-                      Action: {rma.requestedAction.replace('_', ' ')}
+                      Action: {(rma.requestedAction || 'Refund').replace('_', ' ')}
                     </div>
                   </div>
                 </div>
@@ -231,8 +231,8 @@ export const ReturnDetailPage: React.FC = () => {
             <h3 className="text-sm font-bold text-[#111827]">Customer & Destination</h3>
 
             <div className="space-y-1">
-              <div className="font-bold text-[#111827]">{rma.customer.name}</div>
-              <div className="text-[#6B7280]">{rma.customer.email}</div>
+              <div className="font-bold text-[#111827]">{rma.customer?.name || 'Customer'}</div>
+              <div className="text-[#6B7280]">{rma.customer?.email || 'support@buyer.com'}</div>
             </div>
 
             <div className="pt-3 border-t border-[#E5E8F0] space-y-2 font-mono">
@@ -246,7 +246,7 @@ export const ReturnDetailPage: React.FC = () => {
               </div>
               <div className="flex justify-between font-bold text-sm text-emerald-600 pt-1 border-t border-[#E5E8F0]">
                 <span>Total Net Refund:</span>
-                <span>${rma.refundAmount.toFixed(2)}</span>
+                <span>${(rma.refundAmount ?? 0).toFixed(2)}</span>
               </div>
             </div>
           </div>

@@ -23,7 +23,9 @@ export const VendorsListPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all');
 
   const filtered = vendors.filter((v) => {
-    const matchesSearch = v.storeName.toLowerCase().includes(search.toLowerCase()) || v.legalEntity.toLowerCase().includes(search.toLowerCase());
+    const storeName = v.storeName || v.name || '';
+    const legalEntity = v.legalEntity || v.owner || '';
+    const matchesSearch = storeName.toLowerCase().includes(search.toLowerCase()) || legalEntity.toLowerCase().includes(search.toLowerCase()) || v.email.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'all' || v.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -116,12 +118,12 @@ export const VendorsListPage: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <img
                         src={v.logo}
-                        alt={v.storeName}
+                        alt={v.storeName || v.name}
                         className="w-10 h-10 rounded-xl object-cover border border-[#E5E8F0]"
                       />
                       <div>
-                        <div className="font-bold text-[#111827]">{v.storeName}</div>
-                        <div className="text-[11px] text-[#6B7280]">{v.legalEntity} &bull; {v.email}</div>
+                        <div className="font-bold text-[#111827]">{v.storeName || v.name}</div>
+                        <div className="text-[11px] text-[#6B7280]">{(v.legalEntity || v.owner || 'Verified Vendor')} &bull; {v.email}</div>
                       </div>
                     </div>
                   </td>
@@ -131,11 +133,11 @@ export const VendorsListPage: React.FC = () => {
                   </td>
 
                   <td className="p-4 font-mono font-bold text-emerald-600">
-                    ${v.totalSales.toLocaleString()}
+                    ${(v.totalSales ?? v.gmv ?? 0).toLocaleString()}
                   </td>
 
                   <td className="p-4 font-mono text-[#5B6FF5] font-semibold">
-                    ${v.balance.toLocaleString()}
+                    ${(v.balance ?? v.payoutDue ?? 0).toLocaleString()}
                   </td>
 
                   <td className="p-4">
@@ -147,7 +149,7 @@ export const VendorsListPage: React.FC = () => {
 
                   <td className="p-4">
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      {v.kycStatus}
+                      {v.kycStatus || (v.status === 'approved' ? 'Verified' : 'Pending')}
                     </span>
                   </td>
 

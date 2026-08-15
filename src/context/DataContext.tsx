@@ -6,6 +6,8 @@ import {
   Customer,
   Vendor,
   Warehouse,
+  StockTransfer,
+  PurchaseOrder,
   Coupon,
   FlashSale,
   MarketingCampaign,
@@ -40,6 +42,10 @@ interface DataContextType {
   customers: Customer[];
   vendors: Vendor[];
   warehouses: Warehouse[];
+  purchaseOrders: PurchaseOrder[];
+  stockTransfers: StockTransfer[];
+  suppliers: any[];
+  affiliates: any[];
   coupons: Coupon[];
   flashSales: FlashSale[];
   campaigns: MarketingCampaign[];
@@ -106,6 +112,113 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [vendors, setVendors] = useState<Vendor[]>(initialVendors);
   const [warehouses, setWarehouses] = useState<Warehouse[]>(initialWarehouses);
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([
+    {
+      id: 'po_01',
+      poNumber: 'PO-2026-0881',
+      supplierId: 'supp_01',
+      supplierName: 'Apex Precision Acoustics Corp',
+      warehouseId: 'wh_nj_01',
+      warehouseName: 'Central East Coast Hub (New Jersey)',
+      totalAmount: 48500.0,
+      itemsCount: 400,
+      status: 'partially_received',
+      expectedDate: '2026-08-20',
+      createdAt: '2026-08-10',
+    },
+    {
+      id: 'po_02',
+      poNumber: 'PO-2026-0882',
+      supplierId: 'supp_02',
+      supplierName: 'Chronos Swiss Micro-Precision',
+      warehouseId: 'wh_ca_02',
+      warehouseName: 'Pacific West Coast Center (California)',
+      totalAmount: 120000.0,
+      itemsCount: 250,
+      status: 'sent',
+      expectedDate: '2026-08-25',
+      createdAt: '2026-08-12',
+    },
+  ]);
+  const [stockTransfers, setStockTransfers] = useState<StockTransfer[]>([
+    {
+      id: 'st_01',
+      transferNumber: 'TRF-2026-0044',
+      sourceWarehouseId: 'wh_nj_01',
+      sourceWarehouseName: 'Central East Coast Hub (New Jersey)',
+      destWarehouseId: 'wh_ca_02',
+      destWarehouseName: 'Pacific West Coast Center (California)',
+      itemsCount: 3,
+      totalUnits: 150,
+      items: [
+        { sku: 'AUDIO-APX-PRO-SLV', name: 'Apex Pro Noise-Cancelling Wireless Headphones', quantity: 50, receivedQty: 50 },
+        { sku: 'TECH-CHRONO-S9-TI', name: 'Chronos Smart Watch S9 Ultra Titanium', quantity: 100, receivedQty: 100 },
+      ],
+      status: 'in_transit',
+      createdBy: 'Sarah Jenkins',
+      createdAt: '2026-08-13',
+      eta: '2026-08-17',
+      notes: 'Replenish West Coast hub for regional Prime SLA delivery',
+    },
+  ]);
+  const [suppliers, setSuppliers] = useState<any[]>([
+    {
+      id: 'supp_01',
+      name: 'Apex Precision Acoustics Corp',
+      code: 'SUPP-APX',
+      contactPerson: 'David Chen',
+      email: 'david.chen@apex-precision.tw',
+      phone: '+886 2 2345 6789',
+      category: 'Electronics & Audio Components',
+      leadTimeDays: 14,
+      rating: 4.9,
+      status: 'active',
+      totalPOs: 24,
+      totalSpend: 540000,
+    },
+    {
+      id: 'supp_02',
+      name: 'Chronos Swiss Micro-Precision SA',
+      code: 'SUPP-CHRO',
+      contactPerson: 'Sophie Dubois',
+      email: 'sophie.d@chronos-swiss.ch',
+      phone: '+41 22 819 4000',
+      category: 'Titanium Casings & Sapphire Glass',
+      leadTimeDays: 21,
+      rating: 4.95,
+      status: 'active',
+      totalPOs: 18,
+      totalSpend: 890000,
+    },
+  ]);
+  const [affiliates, setAffiliates] = useState<any[]>([
+    {
+      id: 'aff_01',
+      name: 'TechGear Pro Reviews',
+      code: 'TECHPRO10',
+      email: 'partners@techgearpro.com',
+      commissionRate: 8.5,
+      totalClicks: 24500,
+      conversions: 1840,
+      totalRevenue: 348000,
+      earnings: 29580,
+      status: 'active',
+      payoutMethod: 'PayPal',
+    },
+    {
+      id: 'aff_02',
+      name: 'Modern Workspace Studio',
+      code: 'DESKSETUP',
+      email: 'hello@modernworkspaces.io',
+      commissionRate: 10.0,
+      totalClicks: 18200,
+      conversions: 920,
+      totalRevenue: 198000,
+      earnings: 19800,
+      status: 'active',
+      payoutMethod: 'Direct Bank Wire',
+    },
+  ]);
   const [coupons, setCoupons] = useState<Coupon[]>(initialCoupons);
   const [flashSales, setFlashSales] = useState<FlashSale[]>(initialFlashSales);
   const [campaigns, setCampaigns] = useState<MarketingCampaign[]>(initialCampaigns);
@@ -567,6 +680,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         customers,
         vendors,
         warehouses,
+        purchaseOrders,
+        stockTransfers,
+        suppliers,
+        affiliates,
         coupons,
         flashSales,
         campaigns,

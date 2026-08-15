@@ -5,6 +5,7 @@ import { TopBar } from './TopBar';
 import { GlobalSearchModal } from '../common/GlobalSearchModal';
 import { NotificationsPanel } from '../common/NotificationsPanel';
 import { ToastContainer } from '../common/ToastContainer';
+import { ErrorBoundary } from '../common/ErrorBoundary';
 import { useApp } from '../../context/AppContext';
 
 export const AdminLayout: React.FC = () => {
@@ -25,7 +26,9 @@ export const AdminLayout: React.FC = () => {
         }`}
       >
         <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </div>
       </main>
 
