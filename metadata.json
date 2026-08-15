@@ -1,0 +1,6 @@
+{
+  "name": "Enterprise E-Commerce Admin Platform",
+  "description": "Comprehensive enterprise e-commerce management platform with multi-vendor, B2B, catalog, inventory, order processing, marketing, support, and enterprise workflow automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
